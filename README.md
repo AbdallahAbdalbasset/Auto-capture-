@@ -34,9 +34,3 @@ Deployment & Tools:
 - Git & GitHub
 - macOS, VSCode
 
----
-
-
-
-## Project Structure
-
