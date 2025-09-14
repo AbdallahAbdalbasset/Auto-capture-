@@ -60,7 +60,7 @@ app.post("/upload", upload.single("image"), async (req, res) => {
 
     fs.unlinkSync(req.file.path); // cleanup temp file
 
-    res.json({ success: true, fileId: file.data.id, link: file.data.webViewLink });
+    res.json({ success: true });
   } catch (err) {
     console.error("Upload failed:", err);
     res.status(500).send("Upload failed");
